@@ -11,7 +11,7 @@ jobs:
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive -Path ngrok.zip -DestinationPath $env:USERPROFILE
           $env:PATH += ";$env:USERPROFILE"
-          & "$env:USERPROFILE\ngrok.exe" authtoken YOUR_AUTH_TOKEN
+          & "$env:USERPROFILE\ngrok.exe" authtoken 2ywwaqeDXt2myCb88HSXDL7DJqA_2Rcuqke8vPrS2E8cYUKAb
 
       - name: Enable RDP and create user
         run: |
