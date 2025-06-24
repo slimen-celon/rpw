@@ -7,11 +7,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Download and run RustDesk client
+      - name: Download and run RustDesk
         run: |
-          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk-host.exe" -OutFile "rustdesk-host.exe"
-          Start-Process -FilePath "rustdesk-host.exe" -ArgumentList "--tray"
+          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/download/1.2.3/rustdesk-host-1.2.3-x86_64.exe" -OutFile "rustdesk.exe"
+          Start-Process -FilePath "rustdesk.exe" -ArgumentList "--tray"
           Start-Sleep -Seconds 10
           Get-Content "$env:APPDATA\RustDesk\id" | ForEach-Object { "RustDesk ID: $_" }
           Get-Content "$env:APPDATA\RustDesk\passwd" | ForEach-Object { "RustDesk Password: $_" }
-          Start-Sleep -Seconds 3600  # يبقى شغال ساعة
+          Start-Sleep -Seconds 3600
