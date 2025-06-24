@@ -1,28 +1,17 @@
-name: RDP
+name: RustDesk RDP
 
 on: [workflow_dispatch]
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - name: Download ngrok and extract
+      - name: Download and run RustDesk client
         run: |
-          Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-          Expand-Archive -Path ngrok.zip -DestinationPath $env:USERPROFILE
-          $env:PATH += ";$env:USERPROFILE"
-          & "$env:USERPROFILE\ngrok.exe" authtoken 2ywwaqeDXt2myCb88HSXDL7DJqA_2Rcuqke8vPrS2E8cYUKAb
-
-      - name: Enable RDP and create user
-        run: |
-          net user kamel123 MyStrong123 /add
-          net localgroup administrators kamel123 /add
-          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
-          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-
-      - name: Start ngrok tunnel
-        run: |
-          Start-Process -NoNewWindow -FilePath "$env:USERPROFILE\ngrok.exe" -ArgumentList "tcp 3389"
-          Start-Sleep -Seconds 15
-          Invoke-RestMethod -Uri http://127.0.0.1:4040/api/tunnels | Out-File tunnel.txt
-          Get-Content tunnel.txt
+          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk-host.exe" -OutFile "rustdesk-host.exe"
+          Start-Process -FilePath "rustdesk-host.exe" -ArgumentList "--tray"
+          Start-Sleep -Seconds 10
+          Get-Content "$env:APPDATA\RustDesk\id" | ForEach-Object { "RustDesk ID: $_" }
+          Get-Content "$env:APPDATA\RustDesk\passwd" | ForEach-Object { "RustDesk Password: $_" }
+          Start-Sleep -Seconds 3600  # يبقى شغال ساعة
